@@ -1,0 +1,61 @@
+<div class="container w-full p-7">
+    <mat-card>
+        <mat-card-title>Búsqueda de Procesos</mat-card-title>
+        <div class="grid sm:grid-cols-9 gap-6 w-full mt-8">
+        <div class="sm:col-span-3 ">
+            <mat-form-field class="fuse-mat-no-subscript w-full" appearance="outline">
+                <mat-label>Estado</mat-label>
+                        <mat-select (valueChange)="getCodEstado($event)">
+                        <mat-option *ngFor="let item of estados " [value]="item.nConsValor">{{item.cConsDescripcion}}</mat-option>
+                    </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-3 ">
+        <button mat-flat-button color="warn" (click)="getProcess()"  >
+            Buscar
+            <mat-icon>search</mat-icon>
+        </button>
+        </div>
+        </div>
+        </mat-card>
+
+        <div class="w-full mt-8" >
+            <mat-card class="mb-8" *ngFor="let quote of proc; let i = index">
+                <mat-content>
+                    <div class="w-full pl-0 grid grid-cols-6">
+                        <div class="sm:col-span-1">
+                            <div *ngFor="let item of data; let i = index">
+                                <b>
+                                    {{item.name}} - </b>
+                                    <br>
+                            </div>
+                        </div>
+                        <div class="sm:col-span-3">
+                            <p>
+                               {{quote.cNroProcesoSeleccion}}
+                            </p>
+                            <p>
+                                {{quote.NombreProcesoSeleccion}}
+                             </p>
+                             <p>
+                                {{quote.NombreNivel}}
+                             </p>
+                             <p>
+                                {{quote.NombreEtapa}}
+                             </p>
+                             <p>
+                                {{quote.Duracion}}
+                             </p>
+                             <p>
+                                {{quote.NombreRubro}}
+                             </p>
+                        </div>
+                        <div class="sm:col-span-1 align-details">
+                            <a (click)="goto(quote)"> >> Ver</a>
+                        </div>
+                    </div>
+                </mat-content>
+            </mat-card>
+        </div>
+</div>
+

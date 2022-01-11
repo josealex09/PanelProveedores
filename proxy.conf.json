@@ -1,0 +1,17 @@
+{
+    "/Proveedor":{
+        "target":"http://localhost:11410/api",
+        "secure":false,
+        "changeOrigin":true
+    },
+    "/usuarios":{
+        "target":"http://localhost:11410/api",
+        "secure":false,
+        "changeOrigin":true
+    },
+    "/Admin":{
+        "target":"http://localhost:11410/api",
+        "secure":false,
+        "changeOrigin":true
+    }
+}

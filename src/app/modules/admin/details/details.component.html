@@ -1,0 +1,233 @@
+
+<div class="container w-full">
+    <mat-card>
+        <mat-card-title id="title">{{nombre}}</mat-card-title>
+        <mat-stepper orientation="vertical" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+        <ng-template matStepLabel>Detalle</ng-template>
+        <mat-card-header id="header">Requerimiento Asociado</mat-card-header>
+        <div class="grid sm:grid-cols-12 gap-6 w-full mt-5">
+        <form class="grid sm:col-span-6" [formGroup]="firstFormGroup">
+            <mat-form-field class="fuse-mat-no-subscript w-full mt-5">
+                <mat-label >Nombre del Requerimiento</mat-label>
+                <input matInput readonly formControlName="cNombreRequerimiento">
+            </mat-form-field>
+            <mat-form-field class="fuse-mat-no-subscript w-full mt-5">
+                <mat-label>Descripción Resumida</mat-label>
+                <textarea matInput readonly formControlName="cDescripcionRequerimiento" id="text-area"></textarea>
+            </mat-form-field>
+            <mat-form-field class="fuse-mat-no-subscript mt-5">
+                <mat-label>Valor Referencial</mat-label>
+                <input matInput readonly formControlName="nValorReferencial">
+            </mat-form-field>
+        </form>
+        <div class="table sm:col-span-6">
+                    <table class="w-full" mat-table [dataSource]="dataSource3" matSort>
+                        <ng-container matColumnDef="tipodoc">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo doc.</th>
+                            <td mat-cell *matCellDef="let element"> {{element.cTipoDoc}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="descripcion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.cDescripcionDoc}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ver">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ver </th>
+                            <td mat-cell *matCellDef="let element; let i= index">
+                                <button type="button" (click)="downloadFile(element)" mat-icon-button color="warm">
+                                    <mat-icon>book</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+                    </table>
+                </div>
+            </div>
+            <br>
+        <mat-card-header id="header">Etapas</mat-card-header>
+        <div class="grid sm:grid-cols-12 gap-6 w-full mt-5">
+            <div class="grid sm:col-start-3 sm:col-span-8">
+                <table mat-table [dataSource]="dataSourceCalendario" matSort>
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id.</th>
+                        <td mat-cell *matCellDef="let element"> {{element.CodigoEtapaConfigCotizacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nombreetapa">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre de Etapa
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.NombreEtapaConfigCotizacion}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalle
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.DetalleCotizacion}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fechainicio">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Inicio
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.FechaInicio | date:'dd-MM-yyyy'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fechafin">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Fin
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.FechaFin | date:'dd-MM-yyyy' }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCalendario"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCalendario;"></tr>
+                </table>
+            </div>
+        </div>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <ng-template matStepLabel>Cotización</ng-template>
+        <div class="grid sm:grid-cols-12 gap-6 w-full mt-5">
+            <form class="grid sm:col-span-6" [formGroup]="secondFormGroup">
+                <div class="grid sm:grid-cols-12 gap-6 w-full mt-5">
+                <div class="col-span-6">
+                <mat-form-field class="fuse-mat-no-subscript w-full mt-5">
+                    <mat-label>Monto Cotizado</mat-label>
+                    <input matInput  formControlName="nMontoCotizacion">
+                </mat-form-field>
+                </div>
+                <div class="col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript w-full mt-5">
+                        <mat-label>Moneda</mat-label>
+                        <mat-select
+                        [formControlName]="'nCodMoneda'">
+                        <mat-option *ngFor="let item of tipomoneda " [value]="item.CodigoValor">{{item.Descripcion}}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                    </div>
+                </div>
+                <mat-form-field class="fuse-mat-no-subscript w-full mt-5">
+                    <mat-label>Comentario</mat-label>
+                    <textarea matInput  formControlName="cComentario" id="text-area"></textarea>
+                </mat-form-field>
+                <mat-form-field  *ngIf="codEstado===2" class="fuse-mat-no-subscript w-full mt-5">
+                    <mat-label>Observación </mat-label>
+                    <textarea readonly matInput  formControlName="cObservacion" id="text-area"></textarea>
+                </mat-form-field>
+                <mat-form-field *ngIf="codEstado===2" class="fuse-mat-no-subscript w-full mt-5">
+                    <mat-label>Respuesta</mat-label>
+                    <textarea matInput  formControlName="cRespuesta" id="text-area1"></textarea>
+                </mat-form-field>
+                <div class="grid lg:grid-cols-5 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-2 mt-2">
+                    <div class=" lg:col-span-1 col-start-3 md:col-span-1 sm:col-span-1 col-span-1 justify-center align-center">
+                        <button mat-flat-button color="warn" (click)="guardarMontoCotizado()" >
+                            Guardar
+                            <mat-icon>save</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="grid sm:col-span-6" style="height: 240px;">
+                <div class="grid grid-cols-10 gap-3">
+                    <div class="col-span-3">
+                        <mat-form-field class="w-full" appearance="outline">
+                            <mat-label>Tipo de Documento</mat-label>
+                            <mat-select
+                                [formControlName]="'cTipoDoc'">
+                                <mat-option *ngFor="let item of " [value]="item.nConsValor">{{item.cConsDescripcion}}</mat-option>
+                            </mat-select>
+                          <!--   <mat-error *ngIf="secondFormGroup.get('cTipoDoc').hasError('required')">
+                               El tipo de documento es <b>requerido</b>.
+                            </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                    <div class="col-span-3">
+                        <mat-form-field class="w-full" appearance="outline">
+                            <mat-label>Descripcion</mat-label>
+                            <input #cDescripcion  id="cDescripcion"
+                                type="text" matInput placeholder="" formControlName="cDescripcion">
+                            <!-- <mat-error *ngIf="thirdFormGroup.get('cDescripcion').hasError('required')">
+                                La descripción del documento es <b>requerida</b>.
+                            </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                    <div class="form-column lg:col-span-3" fxLayout="column"
+                    fxLayout.md="row" fxLayout.lg="row" fxLayout.lt.xl="row" fxLayoutGap="15px">
+                    <mat-form-field class="columns" appearance="outline">
+                      <mat-label >
+                      </mat-label>
+                      <ng-template #newFile>
+                        <mat-label>Adjuntar archivo</mat-label>
+                      </ng-template>
+                      <input matInput readonly disabled />
+                      <button type="button" mat-icon-button matSuffix (click)="fileInput.click()">
+                        <mat-icon>attach_file</mat-icon>
+                      </button>
+                      <input formControlName="archivo" hidden  #fileInput type="file" id="file"
+                        accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                        <!-- <mat-error *ngIf="secondFormGroup.get('archivo').hasError('required')">
+                            Porfavor subir un archivo ya que es <b>requerido</b>.
+                        </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div class="xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-1 col-span-1 d-flex justify-center align-center">
+                    <button [disabled]="secondFormGroup.invalid"  mat-icon-button color="warn" class="mt-5" type="button">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                </div>
+                <div class="table">
+                    <table class="w-full" mat-table [dataSource]="dataSource4" matSort>
+
+                        <ng-container matColumnDef="tipodoc">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo doc.</th>
+                            <td mat-cell *matCellDef="let element"> {{element.cTipoDoc}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="descripcion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.cDescripcionDoc}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ver">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ver </th>
+                            <td mat-cell *matCellDef="let element; let i= index">
+                                <button type="button" (click)="descargar(element.cAdjunto)" mat-icon-button color="warm">
+                                    <mat-icon>book</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="adjuntado">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Adjuntado por </th>
+                            <td mat-cell *matCellDef="let element"> {{element.CodPersAdjunto}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="opciones">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+                            <td mat-cell *matCellDef="let element; let i= index">
+                                <button type="button" (click)="deletedocument(i)" mat-icon-button color="warm">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumentosAdjuntos"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumentosAdjuntos;"></tr>
+                    </table>
+
+                </div>
+            </div>
+            </div>
+
+        </mat-step>
+    </mat-stepper>
+    </mat-card>
+</div>
+
